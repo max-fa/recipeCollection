@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head lang="en-Us">
+	<title>Recipes</title>
+	<link href="cookingCSS.css" rel="stylesheet">
+	<script>
+		window.onload = init;
+		
+		//When the page loads this function displays all the recipes that have been created.
+		function loadRecipes()	{
+			//make a reques get the JSON and parse it into an array of objects and put it into the recipes array
+			//var meatRecipes = [];
+			//for(var i = 0;i < meatRecipes.length;i++)	{
+				//createRecipeLi(meatRecipes[i]);
+			//}
+		}		
+		
+		function init()	{
+			loadRecipes();
+			
+			//All major componets of page stored here
+			var mainContentPortal = document.getElementById('mainContentPortal');
+			var recipeDisplay = document.getElementById('recipeDisplay');
+			var recipeh1 = document.getElementById('recipeh1');
+			var recipeBody = document.getElementById('recipeBody');
+			
+			//Empty variable to have data stored in it later that is to be shared by multiple functions
+			var recipeFormCheckBoxes;
+			
+			//onclicks for opening and submitting the form.
+			var addRecipeButton = document.getElementById('addRecipeButton');
+			addRecipeButton.onclick = addNewRecipe;
+			var submitFormButton = document.getElementById('submitForm');
+			submitFormButton.onclick = validateForm;
+			
+			document.getElementById('exitForm').onclick = function()	{
+				document.forms.recipeForm.style.display = 'none';
+				document.getElementById('mainContent').style.display = 'block';
+			}
+			
+			//onclick for exiting the recipeDisplay div
+			var	exitButton = document.getElementById('exitButton');
+			exitButton.onclick = function()	{
+				recipeDisplay.style.display = 'none';
+				mainContentPortal.style.display = 'block';
+			}
+			
+			//Below are all the functions to be used in this program
+			
+			//Brings up form and hides background to allow user to fill out fields realting to new recipe
+			function addNewRecipe()	{
+				var mainContent = document.getElementById('mainContent');
+				var recipeForm = document.getElementById('recipeForm');
+				
+				recipeForm.style.display = 'block';
+				mainContent.style.display = 'none';
+			}
+			
+
+			
+			//Validates form,then submits it.
+			function validateForm()	{
+				var recipeForm = document.getElementById('recipeForm');
+				var formTitle = recipeForm.formTitle;
+				var formIngredients = recipeForm.formIngredients;
+				var formInstructions = recipeForm.formInstructions;
+				var breadCheckBox = recipeForm.breadCheckBox;
+				var meatCheckBox = recipeForm.meatCheckBox;
+				var veggieCheckBox = recipeForm.veggieCheckBox;
+				checkForChecked();
+				
+				var newRecipe = new Recipe(formTitle.value,formIngredients.value,formInstructions.value,"recipe",recipeFormCheckBoxes.value);
+				recipeArray.push(newRecipe);
+				var recipeToUse = recipeArray[0];
+				createRecipeLi(newRecipe);
+				saveRecipe(newRecipe);
+				recipeForm.reset();
+				hideForm();
+			}
+			
+			//Creates the li representing the recipe
+			function createRecipeLi(recipe)	{ 
+				//Gathering DOM elements we'll need
+				var breadUl = document.getElementById('breadList');
+				var meatUl = document.getElementById('meatList');
+				var veggieUl = document.getElementById('veggieList');
+			
+				var newLi = document.createElement('li');
+				newLi.className = 'recipe';
+				newLi.innerHTML = recipe.title;
+				newLi.relatedObj = recipe;
+				switch(recipe.classification)	{
+					case 'bread':
+						breadUl.appendChild(newLi);
+						break;
+					case 'meat':
+						meatUl.appendChild(newLi);
+						break;
+					case 'veggies':
+						veggieUl.appendChild(newLi);
+						break;
+					default:
+						console.log("Something's broken.");
+				}
+				var recipeLis = document.querySelectorAll('li.recipe');
+				for(var i = 0;i < recipeLis.length;i++)	{
+					recipeLis[i].onclick = showRecipe;
+				}				
+			}
+			
+			
+			//Sends the recipe to the recipe to the php file to be saved in the database
+			function saveRecipe(obj)	{
+				var objectToPost = JSON.stringify(obj);
+				console.log(objectToPost);
+				
+				/*var xhrObj;
+				if(window.XMLHttpRequest)	{
+					xhrObj = new XMLHttpRequest();
+				} else if(window.ActiveXObject)	{
+					xhrObj = new ActiveXObject();
+				}
+				xhrObj.onreadystatechange = handleResponse;
+				xhrObj.open("POST",somephp.php,true,);
+				xhrObj.send();
+				
+				function handleRespone()	{
+					if(xhrObj.readyState === 4)	{
+						if(xhrObj.status === 200)	{
+							alert(xhrObj.responseText);
+						} else	{
+							alert(xhrObj.statusText);
+						}
+					}
+				}*/
+				
+			}
+			
+			//finds the checkbox that is checked to define a recipe's classification(whether it will be displayed in the meat,bread,or veggies list)
+			function checkForChecked()	{
+				var recipeForm = document.getElementById('recipeForm');
+				var recipeFormInputs = recipeForm.getElementsByTagName("input");
+				
+				for(var i = 0;i < recipeFormInputs.length;i++)	{
+					if(recipeFormInputs[i].type === "checkbox")	{
+						var j = recipeFormInputs[i];
+						if(j.checked === true)	{
+							recipeFormCheckBoxes = j;
+						}
+					}
+				}
+			}
+			
+			//Displays detailed recipe information
+			function showRecipe()	{
+				//Declaring variables we'll need.
+				var recipeBodyIngredients = document.getElementById('recipeBodyIngredients');
+				var recipeBodyInstructions = document.getElementById('recipeBodyInstructions');
+			
+				recipeDisplay.style.display = 'block';
+				mainContentPortal.style.display = 'none';//This and the line above hide and show what elements need to be hidden or seen
+				recipeh1.innerHTML = this.relatedObj.title;
+				recipeBodyIngredients.innerHTML = this.relatedObj.ingredients;
+				recipeBodyInstructions.innerHTML = this.relatedObj.instructions;
+			}
+			
+			//Hides the form and reveals the mainContent div
+			function hideForm()	{
+				var mainContent = document.getElementById('mainContent');
+				var recipeForm = document.getElementById('recipeForm');
+				
+				recipeForm.style.display = "none";
+				mainContent.style.display = "block";
+			}
+		}
+		//An array to store all the objects which contain recipe information.
+		var recipeArray = [];
+		
+		//Class constructor for new recipes
+		function Recipe(title,ingredients,instructions,classAtt,classification)	{
+			this.title = title;
+			this.ingredients = ingredients;
+			this.instructions = instructions;
+			this.classAtt = "recipe";
+			this.classification = classification;
+		}
+	</script>
+</head>
+<body>
+	<div id="mainContent">
+		<div id="mainContentPortal">
+			<h1 style="text-align: center;margin-left: 175px">Base Recipes</h1>
+			<div id="columnOne" class="recipeColumns">
+				<ul id="breadList">
+					<li><h4>Breads</h4></li>
+
+				</ul>
+			</div>
+				
+			<div id="columnTwo" class="recipeColumns">
+				<ul id="meatList">
+					<li><h4>Meat & Seafood</h4></li>
+
+				</ul>
+			</div>
+				
+			<div id="columnThree" class="recipeColumns">
+				<ul id="veggieList">
+					<li><h4>Vegetarian</h4></li>
+					
+				</ul>
+			</div>
+			
+			
+		</div>
+		<div id="recipeDisplay">
+			<h1 id="recipeh1">Hello World!</h1>
+			<p id="recipeBody">
+				<p id="recipeBodyIngredients"></p>
+				<p id="recipeBodyInstructions"></p>
+			</p>
+			<button id="exitButton">Return to Recipes</button>
+		</div>
+	</div>
+		
+	<div id="rightNav">
+		<nav id="mainNav">
+			<ul>
+				<li><a href="index.html">Recipes</a></li>
+				<li><a href="techniques.html">Techniques</a></li>
+				<li><a href="ingredients.html">Ingredients</a></li>
+				<li><a href="tools.html">Tools</a></li>
+			</ul>
+		</nav>
+		<button id="addRecipeButton">Add Recipe</button>
+	</div>
+		
+	<form id="recipeForm" style="position: absolute;left: 28%;background-color: gray;border: solid 5px black;display: none;" onsubmit="return false" novalidate>
+			<label for="formTitle">Enter recipe title:</label>
+			<input type="text" id="formTitle" required>
+			<br>
+			<br>
+			<label for="formIngredients">Enter recipe ingredients:</label>
+			<input type="text" id="formIngredients" required>
+			<p>*Please use commas when entering recipe,once added the recipe ingredients will be displayed as you wrote them.</p>
+			<br>
+			<br>
+			<p><label for="formInstructions">Enter recipe instructions below.</label></p>
+			<textarea cols="55" rows="10" id="formInstructions" required></textarea>
+			<br>
+			<br>
+			<p><label for="column">Choose under which classification this recipe will be placed under.</label></p>
+			<label for="breadCheckBox">Breads</label>
+			<input type="checkbox" id="breadCheckBox" value="bread" class="check">
+			<label for="meatCheckBox">Meat & Fish</label>
+			<input type="checkbox" id="meatCheckBox" value="meat" class="check">
+			<label for="veggieCheckBox">Vegetarian</label>
+			<input type="checkbox" id="veggieCheckBox" value="veggies" class="check">
+			<br>
+			<br>
+			<span><button type="button" id="submitForm">Submit</button></span>
+			<span><button type="reset">Reset Form</button></span>
+			<span><button type="button" id="exitForm">Exit Form</button></span>
+			<br>
+			<br>
+	</form>
+
+</body>
+</html>

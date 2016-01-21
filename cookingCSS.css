@@ -1,0 +1,63 @@
+/*Start: Organizing Static Components of Site*/
+#mainContent	{
+	float: left;
+	width: 1196px;
+}
+
+#rightNav	{
+	float: right;
+}
+
+#mainNav > ul > li	{
+	margin-right: 40px;
+	margin-bottom: 5px;
+	list-style-type: none;
+}
+
+#mainNav > ul > li > a	{
+	color: gray;
+	font-style: arial;
+}
+
+#mainNav > ul > li > a:hover	{
+	color: lime;
+}
+/*End: Organizing Static Components of Site*/
+
+/*This is the body of the main content area*/
+
+.recipeColumns	{
+	float: left;
+	margin-left: 170px;
+}
+
+#columnOne	{
+}
+
+#columnOne > ul > li	{
+	list-style-type: none;
+}
+
+#columnTwo	{
+}
+
+#columnTwo > ul > li	{
+	list-style-type: none;
+}
+
+#columnThree	{
+}
+
+#columnThree > ul > li	{
+	list-style-type: none;
+}
+
+/*The recipe display styles*/
+
+#recipeDisplay	{
+	text-align: center;
+	position: absolute;
+	bottom: 650px;
+	display: none;
+	width: 98%;
+}

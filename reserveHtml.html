@@ -1,0 +1,207 @@
+
+<!DOCTYPE html>
+<html>
+<head lang="en-Us">
+	<title>Recipes</title>
+	<link href="cookingCSS.css" rel="stylesheet">
+	<script>
+		window.onload = init;
+		
+		function init()	{
+			//All relevant dom elements are stored within the following variables.
+			var listDiv = document.getElementById('mainContentPortal');//The div that shows all the recipes in lists is stored here
+			var recipeLi = document.querySelectorAll('li.recipe');//The lis that are given the css class 'recipe' are stored here
+			var recipeDiv = document.getElementById('recipeDisplay');//The div that contains the individual recipes is stored here
+			var recipeTitle = document.getElementById('recipeName');//In the div that displays individual recipes,this is the title of each one
+			var recipeContent = document.getElementById('recipeBody');//This is the recipe instructions
+			var recipeForm = document.forms.recipeForm;//This is the form you fill out to create a new recipe
+			
+			var exitButton = document.getElementById('exitButton');//This is the button you click to return to the recipe lists
+			exitButton.onclick = hideRecipe;
+			
+			var addButton = document.getElementById("addRecipeButton");//This is the button you click to begin the process of adding a new recipe
+			addButton.onclick = showForm;
+			
+			var formButton = document.getElementById("submitForm");//This is the button you to submit the form you filled to create a new recipe
+			formButton.onclick = addRecipe;
+			
+			
+			
+			//This loop attachs a 'click' event handler to all the lis that contain a recipe.
+			for(var i = 0;i < recipeLi.length;i++)	{
+				recipeLi[i].onclick = showRecipe;
+			}
+			
+			//All functions other than those to show/hide the form to be used in this program are written below
+			//This function creates new recipes in javascript
+			function addRecipe()	{
+				recipeTitle = recipeForm.title.value;
+				recipeIngredients = recipeForm.ingredients.value;
+				recipeInstructions = recipeForm.instructions.value;
+				
+				var newRecipe = new Recipe(recipeTitle,recipeIngredients,recipeInstructions);
+				console.log(newRecipe);
+				hideForm();
+			}
+			
+			//This is the object constructor for recipes
+			function Recipe(title,ingredients,instructions)	{
+				this.title = title;
+				this.ingredients = ingredients;
+				this.instructions = instructions;
+			}
+			
+			//This function hides the recipe lists and displays an individual one
+			function showRecipe()	{
+				listDiv.style.display = 'none';
+				recipeTitle.innerHTML = 'This is the title';
+				recipeContent.innerHTML = 'fritopie';
+				recipeDiv.style.display = 'block';
+			}
+			
+			//This function hides the individual recipe and returns you to the lists
+			function hideRecipe()	{
+				listDiv.style.display = 'block';
+				recipeDiv.style.display = 'none';
+			}
+			
+			function showForm()	{
+				document.getElementById("recipeForm").style.display = "block";
+				document.getElementById("mainContentPortal").style.display = "none";
+			}
+			
+			function hideForm()	{
+				document.getElementById("recipeForm").style.display = "none";
+				document.getElementById("mainContentPortal").style.display = "block";
+			}
+		}
+	</script>
+</head>
+<body>
+	<div id="mainContent">
+		<div id="mainContentPortal">
+			<h1 style="text-align: center;margin-left: 175px">Base Recipes</h1>
+			<div id="columnOne" class="recipeColumns">
+				<ul>
+					<li><h4>Breads</h4></li>
+					<!--<li class="recipe">Whole Wheat Pancakes</li>
+					<li class="recipe">Cornbread</li>
+					<li class="recipe">Snickerdoodle Cookies</li>
+					<li class="recipe">Oatmeal Cookies</li>
+					<li class="recipe">All-purpose pancakes</li>
+					<li class="recipe">Naan Bread</li>
+					<li class="recipe">Banana Bread</li>
+					<li class="recipe">Amaranth Bread</li>
+					<li class="recipe">Biscuits</li>
+					<li class="recipe">Brownies</li>
+					<li class="recipe">Blueberry Muffins</li>
+					<li class="recipe">Pizza Crust</li>
+					<li class="recipe">Pie Crust</li>-->
+				</ul>
+			</div>
+				
+			<div id="columnTwo" class="recipeColumns">
+				<ul>
+					<li><h4>Meat & Seafood</h4></li>
+					<!--<li class="recipe">Fried Chicken</li>
+					<li class="recipe">Garlic Chicken Stew</li>
+					<li class="recipe">Meatloaf</li>
+					<li class="recipe">Meatballs</li>
+					<li class="recipe">Pan-fried Chicken</li>
+					<li class="recipe">Fried Shrimp</li>
+					<li class="recipe">Honey Baked Salmon</li>
+					<li class="recipe">Baked Chicken</li>
+					<li class="recipe">Pan-fried steak</li>
+					<li class="recipe">Baked Mahi Mahi</li>
+					<li class="recipe">Fried Red Snapper</li>
+					<li class="recipe">Tuna Salad</li>
+					<li class="recipe">Ginger Seared Tuna Steak</li>
+					<li class="recipe">Fried Porkchops</li>
+					<li class="recipe">Chicken Soup</li>
+					<li class="recipe">Beef Soup</li>
+					<li class="recipe">Braised Beef</li>
+					<li class="recipe">Classic Pot Roast</li>
+					<li class="recipe">Italian Pot Roast</li>
+					<li class="recipe">Broiled/Grilled Chicken</li>-->
+				</ul>
+			</div>
+				
+			<div id="columnThree" class="recipeColumns">
+				<ul>
+					<li><h4>Vegetarian</h4></li>
+					<!--<li class="recipe">Lentil & Rice Soup</li>
+					<li class="recipe">Eggplant Parmesan</li>
+					<li class="recipe">White Pie</li>
+					<li class="recipe">Margherita Pizza</li>
+					<li class="recipe">Tomato Pasta Sauce</li>
+					<li class="recipe">Butternut Squash Pasta Sauce</li>
+					<li class="recipe">Falafel</li>
+					<li class="recipe">Black Bean Soup</li>
+					<li class="recipe">Black and/or Pinto Beans</li>
+					<li class="recipe">Sweet Potato Fries</li>
+					<li class="recipe">Creamy Brocoli & Cauliflower Salad</li>
+					<li class="recipe">Pasta and Veggies</li>
+					<li class="recipe">Spinach & Mushroom Lasagna</li>
+					<li class="recipe">Kale & Sweet Potato Lasagna</li>
+					<li class="recipe">Zucchini Fritters</li>
+					<li class="recipe">Tabouleh</li>
+					<li class="recipe">Fried Rice with Chickpeas</li>
+					<li class="recipe">Fried Yucca</li>
+					<li class="recipe">Chinese Fried Rice</li>
+					<li class="recipe">Mixed Veggie Curry</li>
+					<li class="recipe">Squash Curry</li>
+					<li class="recipe">Sweet Potato & Carrot Soup</li>
+					<li class="recipe">Frito Pie</li>
+					<li class="recipe">Black Bean & Mango Salad</li>
+					<li class="recipe">Root Vegetable Roast</li>
+					<li class="recipe">Butternut Squash Roast with Nuts</li>
+					<li class="recipe">Hummus</li>
+					<li class="recipe">White Dill Sauce</li>
+					<li class="recipe">Lemon Garlic Oil</li>
+					<li class="recipe">Tortilla Chips</li>
+					<li class="recipe">Arroz con Leche</li>-->
+				</ul>
+			</div>
+			
+			
+		</div>
+		<div id="recipeDisplay">
+			<h1 id="recipeName">Hello World!</h1>
+			<p id="recipeBody">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris faucibus mauris et enim elementum aliquet. Cras convallis, erat quis mollis posuere, nulla turpis interdum felis, sit amet auctor risus dolor quis diam. Vivamus dictum vehicula pulvinar. Nulla vel euismod nisi. Donec ullamcorper aliquam turpis. Suspendisse quis luctus sapien, et ultrices orci. Phasellus neque sem, sodales in metus eu, viverra varius odio. Aliquam at venenatis velit. Phasellus et ante sem. Donec et faucibus nisi. Vivamus suscipit tempus sagittis. Suspendisse maximus nisl et vulputate congue. Ut eleifend felis et scelerisque eleifend.</p>
+			<button id="exitButton">Return to Recipes</button>
+		</div>
+	</div>
+		
+		<div id="rightNav">
+			<nav id="mainNav">
+				<ul>
+					<li><a href="index.html">Recipes</a></li>
+					<li><a href="techniques.html">Techniques</a></li>
+					<li><a href="ingredients.html">Ingredients</a></li>
+					<li><a href="tools.html">Tools</a></li>
+				</ul>
+			</nav>
+			<button id="addRecipeButton">Add Recipe</button>
+		</div>
+		
+		<form id="recipeForm" style="position: absolute;left: 28%;background-color: gray;border: solid 5px black;display: none;">
+				<label for="title">Enter recipe title:</label>
+				<input type="text" id="title" required>
+				<br>
+				<br>
+				<label for="ingredients">Enter recipe ingredients:</label>
+				<input type="text" id="ingredients" required>
+				<p>*Please use commas when entering recipe,once added the recipe ingredients will be displayed as you wrote them.</p>
+				<br>
+				<br>
+				<p><label for="instructions">Enter recipe instructions below.</label></p>
+				<textarea cols="55" rows="10" id="instructions" required></textarea>
+				<br>
+				<br>
+				<submit id="submitForm">Submit</submit>
+				<br>
+				<br>
+			</form>
+
+</body>
+</html>
